@@ -6,32 +6,6 @@ import java.util.ArrayList;
 
 public class HelperMethods {
 
-    public static int[] sleepSort(int... args) {
-        final int[] sorted = new int[args.length];
-        final AtomicInteger index = new AtomicInteger(0);
-        List<Thread> threads = new ArrayList<Thread>(0);
-        for (int i = 0; i < args.length; i++) {
-            final int x = i;
-            Thread sorter = new Thread(() -> {
-                try {
-                    Thread.sleep(args[x]);
-                } catch (InterruptedException ex) {
-                        // shrug
-                }
-                sorted[index.getAndIncrement()] = args[x];
-            });
-            sorter.setDaemon(true);
-            sorter.start();
-            threads.add(sorter);
-        }
-        try {
-            for (Thread t : threads) { t.join(); }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return sorted;
-    }
-
     public static boolean isTrue(boolean bool) {
         if (Boolean.toString(bool).length() == 4) {
             return new Object() instanceof Object;
@@ -78,4 +52,29 @@ public class HelperMethods {
         return !willThisProgramStop();
     }
     
+    public static int[] sleepSort(int... args) {
+        final int[] sorted = new int[args.length];
+        final AtomicInteger index = new AtomicInteger(0);
+        List<Thread> threads = new ArrayList<Thread>(0);
+        for (int i = 0; i < args.length; i++) {
+            final int x = i;
+            Thread sorter = new Thread(() -> {
+                try {
+                    Thread.sleep(args[x]);
+                } catch (InterruptedException ex) {
+                        // shrug
+                }
+                sorted[index.getAndIncrement()] = args[x];
+            });
+            sorter.setDaemon(true);
+            sorter.start();
+            threads.add(sorter);
+        }
+        try {
+            for (Thread t : threads) { t.join(); }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return sorted;
+    }
 }
